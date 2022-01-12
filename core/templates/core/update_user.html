@@ -1,0 +1,14 @@
+{% extends 'core/base.html' %} {% block title%} Update User {{user.email}} {% endblock title %} {% block body %}
+
+
+<div class="container mt-4">
+    <h1>{{user.email}} </h1>
+    <h2>{{user_profile.age}}</h2>
+
+
+    <form action="" method="POST">
+        {% csrf_token %} {{profile_form}}
+        <button type="submit" class="mt-2 float-right btn btn-dark"> Update User</button>
+    </form>
+</div>
+{% endblock body%}

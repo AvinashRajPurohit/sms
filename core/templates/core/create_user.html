@@ -1,0 +1,11 @@
+{% extends "core/base.html"%} {% load crispy_forms_tags %} {% block title %} SMS - Add Sales User{% endblock title %} {% block body %}
+<div class="container">
+    <h2 class='text-center mt-2'>Add Sales User</h3>
+        <form action="" method="POST">
+            {% csrf_token %} {{user_form|crispy}} <button type="submit" class="btn btn-dark btn-block">Submit</button>
+
+        </form>
+
+        {% include "core/card.html"%}
+</div>
+{% endblock body%}
