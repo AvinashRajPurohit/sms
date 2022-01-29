@@ -6,9 +6,21 @@
     <h2>{{user_profile.age}}</h2>
 
 
-    <form action="" method="POST">
+    <form action="" method="POST" name='update-form'>
         {% csrf_token %} {{profile_form}}
-        <button type="submit" class="mt-2 float-right btn btn-dark"> Update User</button>
+        <button name='user_submit' value='user_form' type="submit" class="mt-2 float-right btn btn-dark"> Update User</button>
+    </form>
+
+
+
+</div>
+
+<div class="container mt-4">
+    <h3 class="text-center mt-4">Update the Sales data (CSV)</h3>
+    <form method="POST" name='sales-file' enctype="multipart/form-data">
+        {% csrf_token %}
+        <input class="form-control mt-4" type="file" name='sales_file'>
+        <button name='sales_submit' value='file_form' type='submit' class="btn btn-primary mt-2 float-right">Update Sales</button>
     </form>
 </div>
 {% endblock body%}

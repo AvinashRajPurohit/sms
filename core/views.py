@@ -2,9 +2,22 @@ from django.http.response import HttpResponse
 from django.shortcuts import redirect, render
 from core.forms import UserForm, ProfileForm
 from django.contrib.auth.models import User
-from core.models import Profile
+from core.models import Profile, Sales
+import pandas as pd
+from django.shortcuts import get_object_or_404
 
 
+
+def insert_data_in_sales_model(data: list, user_id):
+    """
+    This function will insert data in sales model
+    """
+    user = get_object_or_404(User, id=user_id) # getting the user to which i have to update the sales data
+    for row in data:
+        row['user'] = user
+        Sales.objects.create(**row)
+
+    return "Data has been inserted successfully...."
 
 # Create your views here.
 
@@ -41,12 +54,27 @@ def update_user(request, user_id):
     profile = Profile.objects.get(user=user) # get the profile of perticular user
     form = ProfileForm(instance=profile)
     if request.method == "POST":
-        form = ProfileForm(request.POST, instance=profile)
-        if form.is_valid():
-            form.save()
-            return redirect('update-user', user_id=user_id)
+        if request.POST.get("user_submit", None) == 'user_form':
+            form = ProfileForm(request.POST, instance=profile)
+            if form.is_valid():
+                form.save()
+                return redirect('update-user', user_id=user_id)
+            else:
+                print(form.errors)
         else:
-            print(form.errors)
+            print(request.FILES)
+            print(request.POST)
+            csv_file = request.FILES.get("sales_file")  # getting the csv file...
+            print(csv_file)
+            dict_data = pd.read_csv(csv_file).to_dict('records') # converting the csv to python dict
+            insert_data_in_sales_model(dict_data, user_id)
+            return HttpResponse("sales data is updated")
     context = {"user": user, "user_profile": profile, "profile_form": form}
     return render(request, 'core/update_user.html', context)
 
+
+
+def list_sales_user(request):
+    users = Profile.objects.all()
+    context = {"users": users}
+    return render(request, 'core/user_list.html', context)

@@ -1,0 +1,32 @@
+{% extends "core/base.html"%} {% load crispy_forms_tags %} {% block title %} SMS - Add Sales User{% endblock title %} {% block body %}
+<div class="container">
+    <h2 class='text-center mt-2'>List Sales Users</h3>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">City</th>
+                    <th scope="col">Country</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in users %}
+                <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td>{{profile.user.username}}</td>
+                    <td>{{profile.city}}</td>
+                    <td>{{profile.country}}</td>
+                    <td>
+                        <a href="{% url 'update-user' profile.user.id %}" class="btn btn-success">Update</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+</div>
+{% endblock body%}
